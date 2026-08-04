@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina - Mapa Mental del Código</title>
+    <link rel="stylesheet" href="css/lumina.css">
+    <!-- Cytoscape.js desde CDN -->
+    <script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-brand">
+            <h1>✨ Lumina</h1>
+            <span class="subtitle">Mapa Mental del Código</span>
+        </div>
+        <div class="header-controls">
+            <select id="projectSelect">
+                <option value="1">Proyecto #1</option>
+            </select>
+            <select id="filterSelect">
+                <option value="">Todos los tipos</option>
+                <option value="class">Clases</option>
+                <option value="interface">Interfaces</option>
+                <option value="trait">Traits</option>
+                <option value="function">Funciones</option>
+                <option value="method">Métodos</option>
+            </select>
+            <button id="reloadBtn" class="btn btn-primary">🔄 Recargar</button>
+            <button id="layoutBtn" class="btn">🎨 Re-layout</button>
+        </div>
+    </header>
+
+    <div class="main">
+        <aside class="sidebar">
+            <div class="stats-panel">
+                <h3>📊 Estadísticas</h3>
+                <div id="stats" class="stats">Cargando...</div>
+            </div>
+            <div class="legend-panel">
+                <h3>🎨 Leyenda</h3>
+                <div class="legend">
+                    <div class="legend-item"><span class="dot class"></span> Clase</div>
+                    <div class="legend-item"><span class="dot interface"></span> Interfaz</div>
+                    <div class="legend-item"><span class="dot trait"></span> Trait</div>
+                    <div class="legend-item"><span class="dot function"></span> Función</div>
+                    <div class="legend-item"><span class="dot method"></span> Método</div>
+                </div>
+                <h4 style="margin-top: 15px;">Relaciones</h4>
+                <div class="legend">
+                    <div class="legend-item"><span class="line calls"></span> calls</div>
+                    <div class="legend-item"><span class="line extends"></span> extends</div>
+                    <div class="legend-item"><span class="line implements"></span> implements</div>
+                    <div class="legend-item"><span class="line contains"></span> contains</div>
+                    <div class="legend-item"><span class="line type_hints"></span> type_hint</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="graph-container">
+            <div id="cy"></div>
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Cargando grafo...</p>
+            </div>
+        </main>
+
+        <aside class="detail-panel" id="detailPanel" style="display: none;">
+            <div class="detail-header">
+                <h3 id="detailTitle">Detalles</h3>
+                <button id="closeDetail" class="btn-close">✕</button>
+            </div>
+            <div id="detailContent" class="detail-content">
+                <p>Selecciona un nodo para ver sus detalles</p>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="footer">
+        <span>Lumina v1.7.0</span>
+        <span>•</span>
+        <span id="nodeCount">0 nodos</span>
+        <span>•</span>
+        <span id="edgeCount">0 aristas</span>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/graph.js"></script>
+</body>
+</html>
