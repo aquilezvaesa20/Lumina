@@ -184,7 +184,9 @@ class Lumina
     }
 
     /**
-     * Obtiene la instancia de Database (para uso del CLI)
+     * Obtiene la instancia de Database (para uso del CLI y otros componentes)
+     * 
+     * @return Database Instancia de base de datos para acceso directo
      */
     public function getDb(): Database
     {

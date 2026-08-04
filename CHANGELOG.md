@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-08-04
+### Added
+- **Fase 5 completada**: Generador de Dossiers
+  - `QuestionAnswerer`: responde las 5 preguntas fundamentales de Lumina
+  - `DossierTemplate`: formato Markdown profesional con emojis
+  - `DossierGenerator`: orquestador con confidence score automático
+  - Comando CLI: `./bin/lumina dossier <file|all> [project_id]`
+  - Generación automática de `SKILL.md` para IA
+  - Dossiers individuales en carpeta `/dossiers/`
+  - Heurística inteligente para inferir propósito de clases (27 patrones)
+  - Tests unitarios para QuestionAnswerer
+
 ## [1.0.0] - 2026-08-04
 
 ### Added
