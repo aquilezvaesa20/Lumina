@@ -72,12 +72,12 @@ match ($command) {
 function showHelp(): void
 {
     echo "Comandos disponibles:\n";
-    echo "  analyze <path> [project_id]    Analiza un proyecto PHP (extrae chunks)\n";
-    echo "  populate [project_id]          Construye el grafo de dependencias\n";
-    echo "  dossier <file|all> [project_id] Genera dossier(es)\n";
-    echo "  graph <project_id]             Muestra el grafo de dependencias\n";
-    echo "  help                           Muestra esta ayuda\n\n";
-    echo "Pipeline completo:\n";
+    echo "  analyze <path> [project_id]     Analiza un proyecto PHP (extrae chunks)\n";
+    echo "  populate [project_id]           Construye el grafo de dependencias\n";
+    echo "  dossier <file|all> [project_id] Genera dossier(es) de archivos\n";
+    echo "  graph <project_id>              Muestra el grafo de dependencias\n";
+    echo "  help                            Muestra esta ayuda\n\n";
+    echo "Pipeline completo recomendado:\n";
     echo "  ./bin/lumina analyze ./src 1\n";
     echo "  ./bin/lumina populate 1\n";
     echo "  ./bin/lumina dossier all 1\n\n";

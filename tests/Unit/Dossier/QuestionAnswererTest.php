@@ -118,6 +118,7 @@ class QuestionAnswererTest extends TestCase
                 'parent_name' => 'UserRepository',
                 'visibility' => 'public',
                 'return_type' => '?User',
+                'is_static' => false,
             ],
             [
                 'chunk_type' => 'method',
@@ -125,6 +126,7 @@ class QuestionAnswererTest extends TestCase
                 'parent_name' => 'UserRepository',
                 'visibility' => 'public',
                 'return_type' => 'bool',
+                'is_static' => false,
             ],
         ];
 
