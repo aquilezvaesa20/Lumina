@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Lumina CLI - Motor de Comprensión de Código
+ *
+ * Uso:
+ *   ./bin/lumina analyze <project_path>
+ *   ./bin/lumina dossier <file_path>
+ *   ./bin/lumina graph <project_id>
+ */
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Lumina\Core\Lumina;
+use Lumina\Core\Config;
+
+// Banner
+echo "\n";
+echo "╔══════════════════════════════════════════╗\n";
+echo "║  LUMINA - Motor de Comprensión de Código ║\n";
+echo "║  v1.0.0 | Apache 2.0 License              ║\n";
+echo "╚══════════════════════════════════════════╝\n\n";
+
+$command = $argv[1] ?? 'help';
+$args = array_slice($argv, 2);
+
+$lumina = new Lumina(Config::load());
+
+match ($command) {
+    'analyze' => $lumina->analyzeProject($args[0] ?? '.'),
+    'dossier' => $lumina->generateDossier($args[0] ?? ''),
+    'graph' => $lumina->showGraph((int)($args[0] ?? 0)),
+    'help', '--help', '-h' => showHelp(),
+    default => showHelp(),
+};
+
+function showHelp(): void
+{
+    echo "Comandos disponibles:\n";
+    echo "  analyze <path>    Analiza un proyecto PHP completo\n";
+    echo "  dossier <file>    Genera el dossier de un archivo específico\n";
+    echo "  graph <project>   Muestra el grafo de dependencias\n";
+    echo "  help              Muestra esta ayuda\n\n";
+}
