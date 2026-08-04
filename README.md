@@ -44,12 +44,16 @@ mysql -u usuario -p nombre_base_datos < lumina_schema.sql
 
 ```
 /workspace
-├── lumina_schema.sql          # Esquema de base de datos completo
+├── database/
+│   ├── schema/
+│   │   └── adbbmis1_Cloud.sql    # Dump completo de la base de datos
+│   └── migrations/
+│       └── 001_lumina_core.sql   # Migraciones de Lumina (pendiente)
+├── lumina_schema.sql              # Esquema de base de datos completo
 ├── docs/
-│   └── database-schema.md     # Documentación detallada del esquema
-├── adbbmis1_Cloud.sql         # Esquema existente (otros componentes del sistema)
-├── README.md                  # Este archivo
-└── LICENSE                    # Licencia del proyecto
+│   └── database-schema.md         # Documentación detallada del esquema
+├── README.md                      # Este archivo
+└── LICENSE                        # Licencia del proyecto
 ```
 
 ## Consultas de Ejemplo
