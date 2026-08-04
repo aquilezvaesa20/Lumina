@@ -43,8 +43,26 @@ return [
 
     'dossier' => [
         'auto_generate' => true,
-        'use_ai' => false, // Se activará en Fase 6
+        'use_ai' => false,
         'ai_provider' => 'anthropic',
         'ai_model' => 'claude-3-5-sonnet-20241022',
+    ],
+
+    'ai' => [
+        'provider' => $_ENV['AI_PROVIDER'] ?? 'anthropic',
+        'anthropic' => [
+            'api_key' => $_ENV['ANTHROPIC_API_KEY'] ?? '',
+            'model' => $_ENV['ANTHROPIC_MODEL'] ?? 'claude-3-5-sonnet-20241022',
+            'api_version' => '2023-06-01',
+            'max_tokens' => 4096,
+        ],
+        'openai' => [
+            'api_key' => $_ENV['OPENAI_API_KEY'] ?? '',
+            'model' => $_ENV['OPENAI_MODEL'] ?? 'gpt-4o',
+        ],
+        'rate_limit' => [
+            'requests_per_minute' => 20,
+            'delay_between_requests' => 1, // segundos
+        ],
     ],
 ];

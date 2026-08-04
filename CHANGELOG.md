@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2026-08-04
+### Added
+- **Fase 6 completada**: Integración con IA (Claude API)
+  - `AiClientInterface`: interfaz para clientes de IA
+  - `ClaudeClient`: cliente para Anthropic Claude API con curl
+  - `PromptBuilder`: construye prompts optimizados para las 5 preguntas
+  - `AiEnricher`: orquestador que enriquece dossiers con IA
+  - Comando CLI: `./bin/lumina enrich [project_id] [limit]`
+  - Método `Lumina::enrichWithAi()` para enriquecimiento programático
+  - Configuración de IA en `config/lumina.php` (anthropic, openai)
+  - Variables de entorno en `.env.example` (ANTHROPIC_API_KEY, etc.)
+  - Rate limiting automático (1 segundo entre requests)
+  - Cálculo de costos estimados basado en pricing de Claude 3.5 Sonnet
+  - Parseo robusto de JSON (soporta markdown, texto extra)
+  - Fallback graceful si la API falla (mantiene dossier estático)
+  - Campo `ai_generated = 1` en FileDossiers tras enriquecimiento
+  - Tests unitarios para PromptBuilder y ClaudeClient
+
 ## [1.5.0] - 2026-08-04
 ### Added
 - **Fase 5 completada**: Generador de Dossiers

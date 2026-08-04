@@ -192,4 +192,46 @@ class Lumina
     {
         return $this->db;
     }
+
+    /**
+     * Enriquece dossiers de un proyecto con IA (Claude)
+     *
+     * @param int $projectId ID del proyecto
+     * @param int $limit Límite de archivos a procesar
+     * @return array<string, mixed> Estadísticas del enriquecimiento
+     */
+    public function enrichWithAi(int $projectId, int $limit = 10): array
+    {
+        echo "🤖 Enriqueciendo dossiers con IA (Claude)...\n";
+        echo "   Límite: {$limit} archivos\n\n";
+
+        try {
+            $enricher = new \Lumina\Ai\AiEnricher($this->db, $this->config);
+            $stats = $enricher->enrichProject($projectId, $limit);
+
+            if (isset($stats['success']) && $stats['success'] === false) {
+                echo "❌ Error: {$stats['error']}\n";
+                return $stats;
+            }
+
+            echo "✅ Enriquecimiento completado:\n";
+            echo "   - Archivos procesados: {$stats['files_processed']}\n";
+            echo "   - Archivos enriquecidos: {$stats['files_enriched']}\n";
+            echo "   - Archivos con error: {$stats['files_failed']}\n";
+            echo "   - Tokens totales: " . number_format($stats['total_tokens']) . "\n";
+            echo "   - Costo estimado: $" . number_format($stats['estimated_cost_usd'], 4) . " USD\n";
+
+            if (!empty($stats['errors'])) {
+                echo "\n⚠️  Errores encontrados:\n";
+                foreach (array_slice($stats['errors'], 0, 5) as $error) {
+                    echo "   - {$error['file']}: {$error['error']}\n";
+                }
+            }
+
+            return $stats;
+        } catch (\Throwable $e) {
+            echo "❌ Error: {$e->getMessage()}\n";
+            throw $e;
+        }
+    }
 }
