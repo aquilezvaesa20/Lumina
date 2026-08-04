@@ -4,7 +4,8 @@
  * Lumina CLI - Motor de Comprensión de Código
  *
  * Uso:
- *   ./bin/lumina analyze <project_path>
+ *   ./bin/lumina analyze <project_path> [project_id]
+ *   ./bin/lumina populate [project_id]
  *   ./bin/lumina dossier <file_path>
  *   ./bin/lumina graph <project_id>
  */
@@ -35,30 +36,23 @@ match ($command) {
         $projectId = (int)($args[1] ?? 1);
         $lumina->analyzeProject($path, $projectId);
     })(),
-    'dossier' => showComingSoon('dossier', 'Genera el dossier de comprensión de un archivo específico'),
-    'graph' => showComingSoon('graph', 'Muestra el grafo de dependencias del proyecto'),
+    'populate' => (function() use ($lumina, $args) {
+        $projectId = (int)($args[0] ?? 1);
+        $lumina->populateRelations($projectId);
+    })(),
+    'dossier' => $lumina->generateDossier($args[0] ?? ''),
+    'graph' => $lumina->showGraph((int)($args[0] ?? 0)),
     'help', '--help', '-h' => showHelp(),
     default => showHelp(),
 };
 
-/**
- * Muestra mensaje de "Próximamente" para comandos en desarrollo
- */
-function showComingSoon(string $command, string $description): void
-{
-    echo "🚧 Comando '{$command}': Próximamente\n";
-    echo "   Descripción: {$description}\n";
-    echo "   Estado: En desarrollo (Fase 3+)\n\n";
-    echo "   Este comando estará disponible en las próximas fases.\n";
-    echo "   Por ahora, solo el comando 'help' está completamente funcional.\n\n";
-}
-
 function showHelp(): void
 {
     echo "Comandos disponibles:\n\n";
-    echo "  analyze <path>    Analiza un proyecto PHP completo [Próximamente]\n";
-    echo "  dossier <file>    Genera el dossier de un archivo específico [Próximamente]\n";
-    echo "  graph <project>   Muestra el grafo de dependencias [Próximamente]\n";
-    echo "  help              Muestra esta ayuda\n\n";
+    echo "  analyze <path> [project_id]   Analiza un proyecto PHP (extrae chunks)\n";
+    echo "  populate [project_id]         Construye el grafo de dependencias\n";
+    echo "  dossier <file>                Genera el dossier de un archivo específico\n";
+    echo "  graph <project_id>            Muestra el grafo de dependencias\n";
+    echo "  help                          Muestra esta ayuda\n\n";
     echo "Ejecuta './bin/lumina <comando> --help' para más información sobre un comando.\n\n";
 }
