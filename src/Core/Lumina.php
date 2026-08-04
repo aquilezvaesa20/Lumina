@@ -234,4 +234,66 @@ class Lumina
             throw $e;
         }
     }
+
+    /**
+     * Inicia el servidor web para visualizar el grafo
+     * 
+     * @param int $projectId ID del proyecto a visualizar
+     * @param int $port Puerto del servidor web
+     */
+    public function visualize(int $projectId = 1, int $port = 8080): void
+    {
+        $webDir = dirname(__DIR__, 2) . '/web';
+        
+        if (!is_dir($webDir)) {
+            throw new \RuntimeException("Directorio web no encontrado: {$webDir}");
+        }
+
+        $url = "http://localhost:{$port}";
+        
+        echo "🌐 Iniciando servidor web de Lumina...\n";
+        echo "   URL: {$url}\n";
+        echo "   Proyecto ID: {$projectId}\n";
+        echo "   Presiona Ctrl+C para detener\n\n";
+        echo "💡 Tip: Abre {$url} en tu navegador\n\n";
+
+        // Intentar abrir el navegador automáticamente (multiplataforma)
+        $this->openBrowser($url);
+
+        // Comando del servidor embebido de PHP
+        $cmd = sprintf(
+            'php -S localhost:%d -t %s %s',
+            $port,
+            escapeshellarg($webDir),
+            escapeshellarg($webDir . '/index.php')
+        );
+
+        // Ejecutar servidor
+        passthru($cmd);
+    }
+
+    /**
+     * Intenta abrir el navegador automáticamente
+     * 
+     * @param string $url URL a abrir
+     */
+    private function openBrowser(string $url): void
+    {
+        $os = PHP_OS_FAMILY;
+        $command = match($os) {
+            'Darwin' => "open {$url}",
+            'Windows' => "start {$url}",
+            'Linux' => "xdg-open {$url} 2>/dev/null || sensible-browser {$url} 2>/dev/null",
+            default => null,
+        };
+
+        if ($command) {
+            // Ejecutar en background después de 1 segundo
+            if ($os === 'Windows') {
+                pclose(popen("start /B cmd /C \"timeout /t 1 >nul && {$command}\"", 'r'));
+            } else {
+                exec("(sleep 1 && {$command}) > /dev/null 2>&1 &");
+            }
+        }
+    }
 }
