@@ -1,17 +1,27 @@
 ```
-# Database migration artifacts
-*.sql.bak
-*.sql~
+# Dependencies
+vendor/
+composer.lock
 
-# Temporary files
-*.tmp
-*.swp
+# Build artifacts
+dist/
+build/
+*.phar
 
-# Logs
+# Logs and temp files
 *.log
+*.tmp
 
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# PHP specific
+*.php~
+*.swp
 ```

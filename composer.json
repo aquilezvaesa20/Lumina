@@ -1,0 +1,55 @@
+{
+    "name": "lumina/code-understanding-engine",
+    "description": "Lumina: Motor de comprensión de código PHP que genera grafos de conocimiento y dossiers para IAs y humanos",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Tu Nombre",
+            "email": "tu@email.com"
+        }
+    ],
+    "keywords": [
+        "php",
+        "code-analysis",
+        "static-analysis",
+        "knowledge-graph",
+        "ai-coding",
+        "code-understanding",
+        "parser",
+        "ast"
+    ],
+    "require": {
+        "php": ">=8.2",
+        "nikic/php-parser": "^5.0",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "symfony/var-dumper": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lumina\\": "src/",
+            "Lumina\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyze": "phpstan analyse src tests",
+        "cs-fix": "php-cs-fixer fix",
+        "cs-check": "php-cs-fixer fix --dry-run --diff"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
