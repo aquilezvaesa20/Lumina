@@ -30,7 +30,11 @@ $config = Config::load();
 $lumina = new Lumina($config);
 
 match ($command) {
-    'analyze' => showComingSoon('analyze', 'Analiza un proyecto PHP completo y extrae todos sus chunks'),
+    'analyze' => (function() use ($lumina, $args) {
+        $path = $args[0] ?? '.';
+        $projectId = (int)($args[1] ?? 1);
+        $lumina->analyzeProject($path, $projectId);
+    })(),
     'dossier' => showComingSoon('dossier', 'Genera el dossier de comprensión de un archivo específico'),
     'graph' => showComingSoon('graph', 'Muestra el grafo de dependencias del proyecto'),
     'help', '--help', '-h' => showHelp(),

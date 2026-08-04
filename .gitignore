@@ -1,8 +1,6 @@
 ```
-# Environment
-.env
-.env.local
-.env.*
+# Cache and test results
+.phpunit.cache/
 
 # Dependencies
 vendor/
@@ -11,21 +9,16 @@ vendor/
 *.log
 *.tmp
 
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+
 # OS generated files
 .DS_Store
 Thumbs.db
-
-# PHP specific
-*.php~
-phpunit.xml.dist
-composer.lock
-
-# Tests
-.tests/
-.phpunit.result.cache
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
 ```

@@ -22,6 +22,7 @@
     "require": {
         "php": ">=8.2",
         "nikic/php-parser": "^5.0",
+        "symfony/finder": "^6.0|^7.0",
         "ext-pdo": "*",
         "ext-json": "*",
         "ext-mbstring": "*"

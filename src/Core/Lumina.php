@@ -38,40 +38,36 @@ class Lumina
      * 3. Dossier Generator - Genera dossiers de comprensión
      * 
      * @param string $projectPath Ruta al proyecto a analizar
-     * @return void
-     * 
-     * @todo Implementar en Fase 3 (Chunker)
+     * @param int $projectId ID del proyecto en la BD (default: 1)
+     * @return array<string, mixed> Estadísticas del análisis
      */
-    public function analyzeProject(string $projectPath): void
+    public function analyzeProject(string $projectPath, int $projectId = 1): array
     {
         echo "🔍 Analizando proyecto: {$projectPath}\n";
 
-        // TODO: Implementar en Fase 3
-        // $session = new AnalysisSession($this->db);
-        // $session->start();
-        //
-        // try {
-        //     $chunker = new Chunker($this->config);
-        //     $chunks = $chunker->analyzeDirectory($projectPath);
-        //     $session->recordChunks(count($chunks));
-        //
-        //     $analyzer = new RelationAnalyzer($this->db);
-        //     $relations = $analyzer->analyzeAll($chunks);
-        //     $session->recordRelations(count($relations));
-        //
-        //     $generator = new DossierGenerator($this->db);
-        //     $dossiers = $generator->generateForProject($projectPath);
-        //     $session->recordDossiers(count($dossiers));
-        //
-        //     $session->complete();
-        //     echo "✅ Análisis completado. Dossier generados: " . count($dossiers) . "\n";
-        // } catch (\Throwable $e) {
-        //     $session->fail($e->getMessage());
-        //     echo "❌ Error: " . $e->getMessage() . "\n";
-        //     throw $e;
-        // }
+        try {
+            // Paso 1: Chunker - Extraer SourceChunks
+            $chunker = new Chunker($this->config, $this->db);
+            $stats = $chunker->analyzeDirectory($projectPath, $projectId);
 
-        echo "⚠️  Método stub - Será implementado en Fase 3\n";
+            echo "✅ Análisis completado:\n";
+            echo "   - Archivos encontrados: {$stats['files_found']}\n";
+            echo "   - Archivos parseados: {$stats['files_parsed']}\n";
+            echo "   - Archivos con error: {$stats['files_failed']}\n";
+            echo "   - Chunks extraídos: {$stats['chunks_extracted']}\n";
+
+            if (!empty($stats['errors'])) {
+                echo "\n⚠️  Errores encontrados:\n";
+                foreach (array_slice($stats['errors'], 0, 5) as $error) {
+                    echo "   - {$error['file']}: " . implode(', ', $error['errors']) . "\n";
+                }
+            }
+
+            return $stats;
+        } catch (\Throwable $e) {
+            echo "❌ Error: {$e->getMessage()}\n";
+            throw $e;
+        }
     }
 
     /**
