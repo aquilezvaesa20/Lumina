@@ -64,6 +64,11 @@ match ($command) {
             }
         }
     })(),
+    'enrich' => (function() use ($lumina, $args) {
+        $projectId = (int)($args[0] ?? 1);
+        $limit = (int)($args[1] ?? 10);
+        $lumina->enrichWithAi($projectId, $limit);
+    })(),
     'graph' => $lumina->showGraph((int)($args[0] ?? 0)),
     'help', '--help', '-h' => showHelp(),
     default => showHelp(),
@@ -75,10 +80,12 @@ function showHelp(): void
     echo "  analyze <path> [project_id]     Analiza un proyecto PHP (extrae chunks)\n";
     echo "  populate [project_id]           Construye el grafo de dependencias\n";
     echo "  dossier <file|all> [project_id] Genera dossier(es) de archivos\n";
+    echo "  enrich [project_id] [limit]     Enriquece dossiers con IA (Claude)\n";
     echo "  graph <project_id>              Muestra el grafo de dependencias\n";
     echo "  help                            Muestra esta ayuda\n\n";
     echo "Pipeline completo recomendado:\n";
     echo "  ./bin/lumina analyze ./src 1\n";
     echo "  ./bin/lumina populate 1\n";
-    echo "  ./bin/lumina dossier all 1\n\n";
+    echo "  ./bin/lumina dossier all 1\n";
+    echo "  ./bin/lumina enrich 1 10\n\n";
 }

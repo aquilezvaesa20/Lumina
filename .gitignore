@@ -1,29 +1,30 @@
 ```
-# Dependency directories
+# Dependencies
 vendor/
-
-# Cache and test results
-.phpunit.cache/
-
-# Environment and config files (if any were added)
-.env
-.env.local
-.env.*
 
 # Logs
 *.log
 
-# IDE and editor files
+# Environment
+.env
+.env.local
+.env.*
+
+# IDE
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Build artifacts
+build/
+dist/
+*.phar
 
-# Build artifacts and temporary files
-*.tmp
-*.temp
+# Cache
+.cache/
+.php_cs.cache
+.phpunit.result.cache
+
+# Test
+.phpunit/
+.tests/
 ```
