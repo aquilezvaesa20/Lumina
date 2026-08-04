@@ -225,7 +225,7 @@ Para codebases muy grandes (>10,000 archivos), considerar particionamiento por `
 
 ## Migración desde Esquema Existente
 
-El repositorio ya contiene un archivo `adbbmis1_Cloud.sql` con tablas existentes para un sistema de chat y gestión de proyectos. Las tablas de Lumina son **completamente nuevas** y no entran en conflicto con las existentes.
+El repositorio ya contiene un archivo `database/schema/adbbmis1_Cloud.sql` con tablas existentes para un sistema de chat y gestión de proyectos. Las tablas de Lumina son **completamente nuevas** y no entran en conflicto con las existentes.
 
 **Tablas existentes relacionadas:**
 - `SourceChunks` - Similar a la nueva tabla `chunks`, pero con estructura diferente
