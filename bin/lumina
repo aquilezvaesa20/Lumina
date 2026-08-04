@@ -26,21 +26,35 @@ echo "╚═══════════════════════�
 $command = $argv[1] ?? 'help';
 $args = array_slice($argv, 2);
 
-$lumina = new Lumina(Config::load());
+$config = Config::load();
+$lumina = new Lumina($config);
 
 match ($command) {
-    'analyze' => $lumina->analyzeProject($args[0] ?? '.'),
-    'dossier' => $lumina->generateDossier($args[0] ?? ''),
-    'graph' => $lumina->showGraph((int)($args[0] ?? 0)),
+    'analyze' => showComingSoon('analyze', 'Analiza un proyecto PHP completo y extrae todos sus chunks'),
+    'dossier' => showComingSoon('dossier', 'Genera el dossier de comprensión de un archivo específico'),
+    'graph' => showComingSoon('graph', 'Muestra el grafo de dependencias del proyecto'),
     'help', '--help', '-h' => showHelp(),
     default => showHelp(),
 };
 
+/**
+ * Muestra mensaje de "Próximamente" para comandos en desarrollo
+ */
+function showComingSoon(string $command, string $description): void
+{
+    echo "🚧 Comando '{$command}': Próximamente\n";
+    echo "   Descripción: {$description}\n";
+    echo "   Estado: En desarrollo (Fase 3+)\n\n";
+    echo "   Este comando estará disponible en las próximas fases.\n";
+    echo "   Por ahora, solo el comando 'help' está completamente funcional.\n\n";
+}
+
 function showHelp(): void
 {
-    echo "Comandos disponibles:\n";
-    echo "  analyze <path>    Analiza un proyecto PHP completo\n";
-    echo "  dossier <file>    Genera el dossier de un archivo específico\n";
-    echo "  graph <project>   Muestra el grafo de dependencias\n";
+    echo "Comandos disponibles:\n\n";
+    echo "  analyze <path>    Analiza un proyecto PHP completo [Próximamente]\n";
+    echo "  dossier <file>    Genera el dossier de un archivo específico [Próximamente]\n";
+    echo "  graph <project>   Muestra el grafo de dependencias [Próximamente]\n";
     echo "  help              Muestra esta ayuda\n\n";
+    echo "Ejecuta './bin/lumina <comando> --help' para más información sobre un comando.\n\n";
 }
