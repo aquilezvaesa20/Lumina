@@ -40,7 +40,30 @@ match ($command) {
         $projectId = (int)($args[0] ?? 1);
         $lumina->populateRelations($projectId);
     })(),
-    'dossier' => $lumina->generateDossier($args[0] ?? ''),
+    'dossier' => (function() use ($lumina, $args) {
+        $file = $args[0] ?? '';
+        $projectId = (int)($args[1] ?? 1);
+        
+        if (empty($file)) {
+            echo "Error: Debes especificar un archivo o usar 'all' para todos\n";
+            echo "Uso: ./bin/lumina dossier <archivo|all> [project_id]\n";
+            return;
+        }
+        
+        if ($file === 'all') {
+            $lumina->generateDossiers($projectId);
+        } else {
+            $generator = new \Lumina\Dossier\DossierGenerator($lumina->getDb());
+            $result = $generator->generateForFile($file, $projectId);
+            
+            if ($result['success']) {
+                echo "✅ Dossier generado para: {$file}\n";
+                echo "📁 Guardado en: dossiers/\n";
+            } else {
+                echo "❌ Error: {$result['error']}\n";
+            }
+        }
+    })(),
     'graph' => $lumina->showGraph((int)($args[0] ?? 0)),
     'help', '--help', '-h' => showHelp(),
     default => showHelp(),
@@ -48,11 +71,14 @@ match ($command) {
 
 function showHelp(): void
 {
-    echo "Comandos disponibles:\n\n";
-    echo "  analyze <path> [project_id]   Analiza un proyecto PHP (extrae chunks)\n";
-    echo "  populate [project_id]         Construye el grafo de dependencias\n";
-    echo "  dossier <file>                Genera el dossier de un archivo específico\n";
-    echo "  graph <project_id>            Muestra el grafo de dependencias\n";
-    echo "  help                          Muestra esta ayuda\n\n";
-    echo "Ejecuta './bin/lumina <comando> --help' para más información sobre un comando.\n\n";
+    echo "Comandos disponibles:\n";
+    echo "  analyze <path> [project_id]    Analiza un proyecto PHP (extrae chunks)\n";
+    echo "  populate [project_id]          Construye el grafo de dependencias\n";
+    echo "  dossier <file|all> [project_id] Genera dossier(es)\n";
+    echo "  graph <project_id]             Muestra el grafo de dependencias\n";
+    echo "  help                           Muestra esta ayuda\n\n";
+    echo "Pipeline completo:\n";
+    echo "  ./bin/lumina analyze ./src 1\n";
+    echo "  ./bin/lumina populate 1\n";
+    echo "  ./bin/lumina dossier all 1\n\n";
 }

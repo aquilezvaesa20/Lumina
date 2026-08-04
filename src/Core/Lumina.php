@@ -111,29 +111,33 @@ class Lumina
     }
 
     /**
-     * Genera el dossier de un archivo específico.
-     * 
-     * El dossier contiene información completa sobre el archivo:
-     * - ¿Dónde está? (whereIs)
-     * - ¿Con qué interactúa? (interactsWith)
-     * - ¿Qué hace? (whatDoes)
-     * - ¿Por qué existe? (whyExists)
-     * - ¿Cómo lo hace? (howDoes)
-     * - Causas de fallo conocidas (failureCauses)
-     * 
-     * @param string $filePath Ruta al archivo PHP
-     * @return array<string, mixed> Datos del dossier
-     * 
-     * @todo Implementar en Fase 5 (Dossier)
+     * Genera dossiers para todos los archivos de un proyecto
      */
-    public function generateDossier(string $filePath): array
+    public function generateDossiers(int $projectId): array
     {
-        // TODO: Implementar en Fase 5
-        // $generator = new DossierGenerator($this->db);
-        // return $generator->generateForFile($filePath);
+        echo "📄 Generando dossiers para proyecto #{$projectId}\n";
 
-        echo "⚠️  Método stub - Será implementado en Fase 5\n";
-        return [];
+        try {
+            $generator = new \Lumina\Dossier\DossierGenerator($this->db);
+            $stats = $generator->generateForProject($projectId);
+
+            echo "✅ Dossiers generados:\n";
+            echo "   - Archivos procesados: {$stats['files_analyzed']}\n";
+            echo "   - Dossiers creados: {$stats['dossiers_generated']}\n";
+            echo "   - Errores: " . count($stats['errors']) . "\n";
+
+            if (!empty($stats['errors'])) {
+                echo "\n⚠️  Errores encontrados:\n";
+                foreach (array_slice($stats['errors'], 0, 5) as $error) {
+                    echo "   - {$error['file']}: {$error['error']}\n";
+                }
+            }
+
+            return $stats;
+        } catch (\Throwable $e) {
+            echo "❌ Error: {$e->getMessage()}\n";
+            throw $e;
+        }
     }
 
     /**
@@ -172,10 +176,18 @@ class Lumina
 
         foreach ($relations as $rel) {
             echo "   {$rel['source_name']} ({$rel['source_type']}) " .
-                 "-> {$rel['relation_type']} -> " .
+                 " -> {$rel['relation_type']} -> " .
                  "{$rel['target_name']} ({$rel['target_type']})\n";
         }
 
         return $relations;
+    }
+
+    /**
+     * Obtiene la instancia de Database (para uso del CLI)
+     */
+    public function getDb(): Database
+    {
+        return $this->db;
     }
 }
