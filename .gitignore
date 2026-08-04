@@ -1,1 +1,31 @@
-Nothing should be ignored since only a README.md file was modified and no build artifacts, dependencies, or temporary files were detected in the changes.
+```
+# Environment
+.env
+.env.local
+.env.*
+
+# Dependencies
+vendor/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# PHP specific
+*.php~
+phpunit.xml.dist
+composer.lock
+
+# Tests
+.tests/
+.phpunit.result.cache
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+```
