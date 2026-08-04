@@ -4,7 +4,6 @@
 __pycache__/
 *.o
 *.obj
-*.class
 *.exe
 *.dll
 *.so
@@ -12,8 +11,9 @@ __pycache__/
 *.out
 
 # Dependencies
-vendor/
 node_modules/
+venv/
+.venv/
 .env
 .env.local
 .env.*
@@ -27,25 +27,23 @@ node_modules/
 # Editors
 .vscode/
 .idea/
-*.swp
-*.swo
 
 # Coverage
 .coverage
 coverage/
 htmlcov/
 
-# Distribution / packaging
+# Build systems
 dist/
 build/
-*.egg-info/
-*.whl
-*.zip
-*.tar.gz
-*.tar.bz2
-*.tar.xz
+target/
+.gradle/
 
-# OS generated files
+# System files
 .DS_Store
 Thumbs.db
+
+# Cache directories
+.mypy_cache/
+.pytest_cache/
 ```
