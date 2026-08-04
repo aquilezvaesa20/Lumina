@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lumina\Core;
 
 use Lumina\Parser\Chunker;
-use Lumina\Populator\RelationAnalyzer;
+use Lumina\Populator\DependencyGraph;
 use Lumina\Dossier\DossierGenerator;
 use Lumina\Analyzer\AnalysisSession;
 
@@ -71,6 +71,46 @@ class Lumina
     }
 
     /**
+     * Construye el grafo de dependencias para un proyecto.
+     * 
+     * Analiza todos los SourceChunks del proyecto y detecta las relaciones
+     * entre ellos (llamadas, extends, implements, etc.) para construir
+     * el grafo de conocimiento en la tabla ChunkRelations.
+     * 
+     * @param int $projectId ID del proyecto
+     * @return array<string, mixed> Estadísticas del proceso
+     */
+    public function populateRelations(int $projectId): array
+    {
+        echo "🔗 Construyendo grafo de dependencias para proyecto #{$projectId}\n";
+
+        try {
+            $graph = new DependencyGraph($this->db);
+            $stats = $graph->buildForProject($projectId);
+
+            echo "✅ Grafo construido:\n";
+            echo "   - Chunks analizados: {$stats['chunks_analyzed']}\n";
+            echo "   - Relaciones encontradas: {$stats['relations_found']}\n";
+            echo "   - Relaciones insertadas: {$stats['relations_inserted']}\n";
+            echo "   - Relaciones omitidas: {$stats['relations_skipped']}\n";
+            echo "   - Targets no resueltos: " . count($stats['unresolved_targets']) . "\n";
+
+            if (!empty($stats['unresolved_targets'])) {
+                $unique = array_unique($stats['unresolved_targets']);
+                echo "\n⚠️  Targets no resueltos (primeros 10):\n";
+                foreach (array_slice($unique, 0, 10) as $target) {
+                    echo "   - {$target}\n";
+                }
+            }
+
+            return $stats;
+        } catch (\Throwable $e) {
+            echo "❌ Error: {$e->getMessage()}\n";
+            throw $e;
+        }
+    }
+
+    /**
      * Genera el dossier de un archivo específico.
      * 
      * El dossier contiene información completa sobre el archivo:
@@ -104,13 +144,38 @@ class Lumina
      * 
      * @param int $projectId ID del proyecto
      * @return array<int, array<string, mixed>> Relaciones del grafo
-     * 
-     * @todo Implementar en Fase 4 (Populator/Grafo)
      */
     public function showGraph(int $projectId): array
     {
-        // TODO: Implementar en Fase 4
-        echo "⚠️  Método stub - Será implementado en Fase 4\n";
-        return [];
+        echo "📊 Grafo de dependencias del proyecto #{$projectId}:\n";
+
+        $relations = $this->db->fetchAll(
+            "SELECT 
+                sc.name AS source_name,
+                sc.chunk_type AS source_type,
+                cr.relation_type,
+                tc.name AS target_name,
+                tc.chunk_type AS target_type
+             FROM ChunkRelations cr
+             JOIN SourceChunks sc ON cr.source_chunk_id_ = sc.id_
+             JOIN SourceChunks tc ON cr.target_chunk_id_ = tc.id_
+             WHERE cr.project_id_ = ?
+             ORDER BY cr.relation_type, sc.name
+             LIMIT 50",
+            [$projectId]
+        );
+
+        if (empty($relations)) {
+            echo "   No hay relaciones registradas.\n";
+            return [];
+        }
+
+        foreach ($relations as $rel) {
+            echo "   {$rel['source_name']} ({$rel['source_type']}) " .
+                 "-> {$rel['relation_type']} -> " .
+                 "{$rel['target_name']} ({$rel['target_type']})\n";
+        }
+
+        return $relations;
     }
 }
